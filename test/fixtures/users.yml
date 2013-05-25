@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  plataform_id: MyString
+  phone_number: MyString
+  password: MyString
+  wallet: 1.5
+
+two:
+  plataform_id: MyString
+  phone_number: MyString
+  password: MyString
+  wallet: 1.5
