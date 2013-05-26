@@ -1,33 +1,92 @@
-<%= form_for(@user) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<%= form_for @user, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :plataform_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :plataform_id, :class => 'text_field' %>
     </div>
-  <% end %>
+  </div>
+  <div class="control-group">
+    <%= f.label :phone_number, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :phone_number, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :password, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :password, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :wallet, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :wallet, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :use_mobile_app, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :use_mobile_app, :class => 'check_box' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :email, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :email, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :encrypted_password, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :encrypted_password, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :reset_password_token, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :reset_password_token, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :reset_password_sent_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :reset_password_sent_at, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :remember_created_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :remember_created_at, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :current_sign_in_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :current_sign_in_at, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :last_sign_in_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :last_sign_in_at, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :current_sign_in_ip, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :current_sign_in_ip, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :last_sign_in_ip, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :last_sign_in_ip, :class => 'text_field' %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :plataform_id %><br />
-    <%= f.text_field :plataform_id %>
-  </div>
-  <div class="field">
-    <%= f.label :phone_number %><br />
-    <%= f.text_field :phone_number %>
-  </div>
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.text_field :password %>
-  </div>
-  <div class="field">
-    <%= f.label :wallet %><br />
-    <%= f.text_field :wallet %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                users_path, :class => 'btn' %>
   </div>
 <% end %>

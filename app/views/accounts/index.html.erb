@@ -1,31 +1,52 @@
-<h1>Listing accounts</h1>
-
-<table>
-  <tr>
-    <th>User</th>
-    <th>Client</th>
-    <th>Fee</th>
-    <th>Bank account</th>
-    <th>Amount</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @accounts.each do |account| %>
-  <tr>
-    <td><%= account.user_id %></td>
-    <td><%= account.client_id %></td>
-    <td><%= account.fee %></td>
-    <td><%= account.bank_account %></td>
-    <td><%= account.amount %></td>
-    <td><%= link_to 'Show', account %></td>
-    <td><%= link_to 'Edit', edit_account_path(account) %></td>
-    <td><%= link_to 'Destroy', account, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+<%- model_class = Account -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:user_id) %></th>
+      <th><%= model_class.human_attribute_name(:client_id) %></th>
+      <th><%= model_class.human_attribute_name(:fee) %></th>
+      <th><%= model_class.human_attribute_name(:bank_account) %></th>
+      <th><%= model_class.human_attribute_name(:amount) %></th>
+      <th><%= model_class.human_attribute_name(:payment_day) %></th>
+      <th><%= model_class.human_attribute_name(:is_loan) %></th>
+      <th><%= model_class.human_attribute_name(:total_loan) %></th>
+      <th><%= model_class.human_attribute_name(:balance_paid) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @accounts.each do |account| %>
+      <tr>
+        <td><%= link_to account.id, account_path(account) %></td>
+        <td><%= account.user_id %></td>
+        <td><%= account.client_id %></td>
+        <td><%= account.fee %></td>
+        <td><%= account.bank_account %></td>
+        <td><%= account.amount %></td>
+        <td><%= account.payment_day %></td>
+        <td><%= account.is_loan %></td>
+        <td><%= account.total_loan %></td>
+        <td><%= account.balance_paid %></td>
+        <td><%=l account.created_at %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_account_path(account), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      account_path(account),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<br />
-
-<%= link_to 'New Account', new_account_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_account_path,
+            :class => 'btn btn-primary' %>
