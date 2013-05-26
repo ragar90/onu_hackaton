@@ -16,7 +16,13 @@ module OnuHackaton
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
+    config.autoload_paths += %W(#{config.root}/lib)
+    
+    env_file = File.join(Rails.root, 'config', 'twilio.yml')
+      YAML.load(File.open(env_file)).each do |key, value|
+        ENV[key.to_s] = value.to_s
+    end if File.exists?(env_file)
+
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
