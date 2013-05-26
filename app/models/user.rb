@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :clients, :through=>:accounts
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
-  attr_accessible :password, :phone_number, :plataform_id, :wallet, :use_mobile_app
+  attr_accessible :plataform_id,:phone_number,:password,:wallet,:use_mobile_app,
+                  :created_at,:updated_at,:email,:encrypted_password,:reset_password_token,
+                  :reset_password_sent_at,:remember_created_at,:sign_in_count,:current_sign_in_at,
+                  :last_sign_in_at,:current_sign_in_ip,:last_sign_in_ip
 end
