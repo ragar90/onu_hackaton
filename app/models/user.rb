@@ -53,14 +53,15 @@ class User < ActiveRecord::Base
     plataform_id = data_hash["plataform_id"]
     account_id = data_hash["account_id"]
     account = Account.find_by_bank_account(account_id)
+    token= Devise.freadly_token
+    message = ""
     if !account.nil?
       account.transaction do 
         begin
           if account && self.wallet >= amount
             self.update_attribute(:wallet, self.wallet - amount)
             account.update_attribute(:amount,account+amount)
-            at = AccountTransaction.create(:acount_id=>account.id, :amount=>account.ammount.to_f, :transaction_token=>Devise.freadly_token)
-            message = "Hola, gracias por tu pago; Toston te recuerda pagar antes de tu fecha limite para evitar sobrecargos tu codigo de confirmacion es: #{at.transaction_token} "
+            at = AccountTransaction.create(:acount_id=>account.id, :amount=>account.ammount.to_f, :transaction_token=>token)
           else
             return false
           end
@@ -69,7 +70,7 @@ class User < ActiveRecord::Base
           return false
         end
       end
-      
+      message = "Hola, gracias por tu pago; Toston te recuerda pagar antes de tu fecha limite para evitar sobrecargos tu codigo de confirmacion es: #{token} "
     else
       message = "Sucedio un problema con tu trasaccion revisa los digitos de tu cuenta y pin"
     end
