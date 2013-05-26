@@ -49,11 +49,25 @@ class User < ActiveRecord::Base
 
     #HERE GOES THE SHOW
     command = data_hash["command"]
-    amount = data_hash["amount"]
+    amount = data_hash["amount"].to_f
     plataform_id = data_hash["plataform_id"]
     account_id = data_hash["account_id"]
-
-    message = "Hola, gracias por tu pago; los datos que enviaste son: #{command},#{amount},#{plataform_id},#{account_id}"
+    account = Account.find(account_id)
+    account.transaction do 
+      begin
+        if account && self.wallet >= amount
+          self.update_attribute(:wallet, self.wallet - amount)
+          account.update_attribute(:amount,account+amount)
+          at = AccountTransaction.create(:acount_id=>account.id, :amount=>account.ammount.to_f, :transaction_token=>Devise.freadly_token)
+        else
+          return false
+        end
+      rescue
+        raise ActiveRecord::Rollback
+        return false
+      end
+    end
+    message = "Hola, gracias por tu pago; Toston te recuerda pagar antes de tu fecha limite para evitar sobrecargos tu codigo de confirmacion es: #{at.transaction_token} "
     sender = SmsMod::Sender.new
     sender.send_message(self.phone_number, message)
   end
