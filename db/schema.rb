@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130526135320) do
+ActiveRecord::Schema.define(:version => 20130526141924) do
 
   create_table "account_transactions", :force => true do |t|
     t.integer  "account_id"
     t.float    "amount"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "transaction_token"
   end
 
   add_index "account_transactions", ["account_id"], :name => "index_account_transactions_on_account_id"
@@ -30,13 +31,18 @@ ActiveRecord::Schema.define(:version => 20130526135320) do
     t.float    "amount"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.date     "payment_day"
+    t.boolean  "is_loan"
+    t.float    "total_loan"
+    t.float    "balance_paid"
   end
 
   create_table "clients", :force => true do |t|
     t.string   "name"
-    t.boolean  "is_loan",    :default => true
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.boolean  "is_bank",     :default => true
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.float    "total_money"
   end
 
   create_table "user_messages", :force => true do |t|
