@@ -1,14 +1,15 @@
-#!/usr/bin/env ruby
-require File.expand_path("../../config/environment", __FILE__)
-STDOUT.sync = true
+config = ActiveRecord::Base.remove_connection
 
-Stalker::job 'user.fetch_details' do |args|
-  begin
-  	rec = SmsMod::Receiver.new
-  	rec.get_messages
-  rescue
-    Rails.logger.warn "Suspect too fast, requeuing"
-  end
+pid = fork do
+	ActiveRecord::Base.establish_connection(config)
+
+	while true
+		rec = SmsMod::Receiver.new
+		rec.get_messages
+		sleep 5
+	end
 end
-jobs = ARGV.shift.split(',') rescue nil
-Stalker.work jobs
+
+ActiveRecord::Base.establish_connection(config)
+
+puts "PID of sms_daemon.rb: #{pid}"

@@ -1,5 +1,3 @@
-require 'daemons'
-
 module SmsMod
 	class Receiver
 
@@ -17,10 +15,9 @@ module SmsMod
 				if um.nil?
 					user = User.compare_number(sms.from)
 					if !user.nil?
-						UserMessage.create!(user_id: user.id, message_id: sms.sid, message: sms.message, from: sms.from, date_sent: sms.date_sent)
-
-						@message = sms.message
-						result = strip_message(%w(password amount command account_id))
+						@message = sms.body
+						data_hash = strip_message(%w(command amount plataform_id account_id))
+						user.register_message(sms.sid, sms.body, sms.from, sms.date_sent, data_hash)
 					end
 				end
 			end
