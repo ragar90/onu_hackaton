@@ -38,4 +38,11 @@ class Account < ActiveRecord::Base
   		end
   	end
   end
+  has_many :account_transactions
+
+  def new_transaction(pay_amount)
+  	update_attribute("amount", self.amount + pay_amount)
+  	AccountTransaction.create!(account_id: self.id, amount: pay_amount)
+  	true
+  end
 end
