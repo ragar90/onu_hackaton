@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130525232809) do
+ActiveRecord::Schema.define(:version => 20130526135320) do
+
+  create_table "account_transactions", :force => true do |t|
+    t.integer  "account_id"
+    t.float    "amount"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "account_transactions", ["account_id"], :name => "index_account_transactions_on_account_id"
 
   create_table "accounts", :force => true do |t|
     t.integer  "user_id"
@@ -29,6 +38,18 @@ ActiveRecord::Schema.define(:version => 20130525232809) do
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
   end
+
+  create_table "user_messages", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "message_id"
+    t.string   "message"
+    t.string   "from"
+    t.datetime "date_sent"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "user_messages", ["user_id"], :name => "index_user_messages_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "plataform_id"
