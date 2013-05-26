@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
     amount = data_hash["amount"].to_f
     plataform_id = data_hash["plataform_id"]
     account_id = data_hash["account_id"]
-    account = Account.find_by_bank_acount(account_id)
+    account = Account.find_by_bank_account(account_id)
     account.transaction do 
       begin
         if account && self.wallet >= amount
