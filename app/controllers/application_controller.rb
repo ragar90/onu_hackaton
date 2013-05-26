@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 	#response.headers['Access-Control-Request-Method'] = 'GET, PUT, POST, DELETE'
 	# Rails 3
 		headers['Access-Control-Allow-Origin'] = 'http://xxx.xxx.xxx.xxx:yyyy'
-		headers['Access-Control-Request-Method'] = 'GET, PUT, POST, DELETE'
+		#headers['Access-Control-Request-Method'] = 'GET, PUT, POST, DELETE'
 		#headers["content-type"] = "image/png"
 	end
 
