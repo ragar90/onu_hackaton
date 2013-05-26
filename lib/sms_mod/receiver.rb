@@ -9,7 +9,7 @@ module SmsMod
 
 		def get_messages
 			@client.account.sms.messages.list({:date_sent => '2013-05-26'}).each do |sms|
-  				puts sms.id
+  				puts sms.sid
 			end
 		end
 
