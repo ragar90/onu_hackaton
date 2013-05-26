@@ -1,6 +1,12 @@
 OnuHackaton::Application.routes.draw do
   devise_for :users, :controllers => { :sessions => "sessions" }
 
+  namespace :api do
+    get 'get_acounts' => 'mobile_app#get_accounts'
+    get 'get_account_info/:id' => 'mobile_app#get_account_info'
+    post 'check_payment' => 'mobile_app#process_payment'
+  end
+
   root :to => "home#index"
   get "inicio" => "home#index"
 
