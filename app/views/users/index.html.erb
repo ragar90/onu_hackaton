@@ -19,6 +19,7 @@
     <% @users.each do |user| %>
       <tr>
         <td><%= link_to user.id, user_path(user) %></td>
+        <td><%= user.plataform_id %></td>
         <td><%= user.phone_number %></td>
         <td><%= user.password %></td>
         <td><%= user.wallet %></td>

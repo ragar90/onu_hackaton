@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
     plataform_id = data_hash["plataform_id"]
     account_id = data_hash["account_id"]
     account = Account.find_by_bank_account(account_id)
-    token= Devise.freadly_token
+    token= SecureRandom.hex(len=7).to_i(16).to_s(36)[0..9]
     message = ""
     if !account.nil?
       account.transaction do 
