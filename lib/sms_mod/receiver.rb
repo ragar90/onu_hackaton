@@ -1,3 +1,5 @@
+require 'daemons'
+
 module SmsMod
 	class Receiver
 
@@ -8,8 +10,19 @@ module SmsMod
 		end
 
 		def get_messages
-			@client.account.sms.messages.list({:date_sent => '2013-05-26'}).each do |sms|
-  				puts sms.sid
+			last_date = UserMessage.last.date_sent.strftime("%Y-%m-%d") rescue Time.now.strftime("%Y-%m-%d")
+
+			@client.account.sms.messages.list({:date_sent => last_date}).each do |sms|
+				um = UserMessage.find_by_message_id(sms.sid) rescue nil
+				if um.nil?
+					user = User.compare_number(sms.from)
+					if !user.nil?
+						UserMessage.create!(user_id: user.id, message_id: sms.sid, message: sms.message, from: sms.from, date_sent: sms.date_sent)
+
+						@message = sms.message
+						result = strip_message(%w(password amount command account_id))
+					end
+				end
 			end
 		end
 

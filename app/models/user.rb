@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   				:rememberable, :trackable, :validatable
   has_many :accounts
   has_many :clients, :through=>:accounts
+  has_many :user_messages
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
@@ -27,6 +28,10 @@ class User < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def self.compare_number(number)
+    where("CONCAT('+503', phone_number)=?", number).first rescue nil
   end
 
 end
