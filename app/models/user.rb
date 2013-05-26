@@ -71,8 +71,8 @@ class User < ActiveRecord::Base
             sender.send_message(self.phone_number, message)
             return false
           end
-        rescue
-          puts "Se genero una excepcion"
+        rescue Exception => e
+          puts e.to_yaml
           raise ActiveRecord::Rollback
           return false
         end
