@@ -25,7 +25,7 @@ end
 
 if User.count == 0
 	puts "Creating Users"
-	for i in 1..10 do
+	for i in 1..25 do
 		u=User.create(:plataform_id=>SecureRandom.hex(len=7).to_i(16).to_s(36)[0..5],:wallet=>100,:password=>"123456789",:email=>"rene.garcia#{i}@gmail.com")
 		puts "Creating Accunt"
 		if i%2 == 0

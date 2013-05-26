@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130526065951) do
+ActiveRecord::Schema.define(:version => 20130526141924) do
 
   create_table "account_transactions", :force => true do |t|
     t.integer  "account_id"
     t.float    "amount"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "transaction_token"
   end
 
   add_index "account_transactions", ["account_id"], :name => "index_account_transactions_on_account_id"

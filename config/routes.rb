@@ -5,7 +5,8 @@ OnuHackaton::Application.routes.draw do
   namespace :api do
     get 'get_acounts' => 'mobile_app#get_accounts'
     get 'get_account_info/:id' => 'mobile_app#get_account_info'
-    post 'check_payment' => 'mobile_app#process_payment'
+    post 'process_payment/:type/from/:user_id/to/:client_id/of/:amount' => 'mobile_app#process_payment_for_cedit'
+    get "service_payments" => "mobile_app#service_clients"
   end
 
   root :to => "home#index"

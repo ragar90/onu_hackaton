@@ -1,3 +1,5 @@
+#!/bin/env ruby
+# encoding: utf-8
 class Api::MobileAppController < ApplicationController
 
 	respond_to :json
@@ -8,6 +10,13 @@ class Api::MobileAppController < ApplicationController
 		respond_to do |format|
 			format.json { render :json => {wallet: user.wallet, accounts: user.accounts, status: 1} }
 		end
+	end
+
+	def service_clients
+		clients = Client.where(:is_bank=>false)
+		respond_to do |format|
+			format.json{ render :json=>clients }
+		end 
 	end
 
 	def get_account_info
@@ -25,26 +34,58 @@ class Api::MobileAppController < ApplicationController
 		end
 	end
 
-	def process_payment
-		user = current_user2
-		if user.check_pass(params[:password])
-			response = user.make_payment(params[:amount].to_f, params[:id])
-			if response
-				code = 1 #success
-			else
-				code = 2 #no enough money
-			end
+	def proccess_credit(user,amount,client_id)
+		return_values = {}
+		response = user.pay_credit_loan(amount,client_id)
+		if !user.check_pass(params[:password])
+			return_values[:message] = "Contraseña incorrecta, no se puede realizar la transaccion"
+			return_values[:code] = 0 #bad pass
+			return_values[:confirmation_token] = ""
+		elsif response
+			return_values[:code] = 1 #success
+			return_values[:message] = "Abono a credito realizado con exito"
+			account = AccountTransaction.create(:acount_id=>account_for(params[:client_id]).id, :amount=>params[:amount].to_f, :transaction_token=>Devise.freadly_token)
+			return_values[:confirmation_token] = account.transaction_token
+			
 		else
-			code = 0 #bad pass
+			return_values[:message] = "No hay suficiente saldo para realizar este abono"
+			return_values[:code] = 2 #no enough money
+			return_values[:confirmation_token] = ""
 		end
+		return return_values
+	end
 
+	def proccess_service(user,amount,client_id)
+		return_values = {}
+		response = user.pay_third_service(amount,client_id)
+		if !user.check_pass(params[:password])
+			return_values[:message] = "Contraseña incorrecta, no se puede realizar la transaccion"
+			return_values[:code] = 0 #bad pass
+			return_values[:confirmation_token] = ""
+		elsif response
+			return_values[:code] = 1 #success
+			return_values[:message] = "Pago realizado con exito"
+			return_values[:confirmation_token] = Devise.freadly_token
+			
+		else
+			return_values[:message] = "No hay suficiente saldo para realizar este abono"
+			return_values[:code] = 2 #no enough money
+			return_values[:confirmation_token] = ""
+		end
+		return return_values
+	end
+
+	#Proceso de pago de "wallet" a "cuenta madre"
+	def process_payments
+		user = current_user2
+		return_values = type == "credit" ? proccess_credit(user,params[:amount].to_f, params[:client_id]) : proccess_service(user,params[:amount].to_f, params[:client_id])
 		respond_to do |format|
-			format.json { render :json => {status: code} }
+			format.json { render :json => return_values.to_json }
 		end
 	end
 
 	def current_user2
-		User.first
+		@user = User.where(:plataform_id=>params[:user_id]).first
 	end
 
 end
