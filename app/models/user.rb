@@ -62,20 +62,27 @@ class User < ActiveRecord::Base
             self.update_attribute(:wallet, self.wallet - amount)
             account.update_attribute(:amount,account+amount)
             at = AccountTransaction.create(:acount_id=>account.id, :amount=>account.ammount.to_f, :transaction_token=>token)
+            message = "Hola, gracias por tu pago; Toston te recuerda pagar antes de tu fecha limite para evitar sobrecargos tu codigo de confirmacion es: #{token} "
+            sender = SmsMod::Sender.new
+            sender.send_message(self.phone_number, message)
           else
+            message = "No esta entrando al if"
+            sender = SmsMod::Sender.new
+            sender.send_message(self.phone_number, message)
             return false
           end
         rescue
+          puts "Se genero una excepcion"
           raise ActiveRecord::Rollback
           return false
         end
       end
-      message = "Hola, gracias por tu pago; Toston te recuerda pagar antes de tu fecha limite para evitar sobrecargos tu codigo de confirmacion es: #{token} "
     else
       message = "Sucedio un problema con tu trasaccion revisa los digitos de tu cuenta y pin"
+      sender = SmsMod::Sender.new
+      sender.send_message(self.phone_number, message)
     end
-    sender = SmsMod::Sender.new
-    sender.send_message(self.phone_number, message)
+    
   end
 
   def pay_third_service(amount, client_id)
