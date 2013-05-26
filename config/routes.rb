@@ -1,7 +1,6 @@
 OnuHackaton::Application.routes.draw do
   devise_for :users, :controllers => { :sessions => "sessions" }
 
-  get "get_user_message" => "home#get_user_message"
   namespace :api do
     get 'get_acounts' => 'mobile_app#get_accounts'
     get 'get_account_info/:id' => 'mobile_app#get_account_info'
@@ -14,9 +13,7 @@ OnuHackaton::Application.routes.draw do
 
   resources :clients
 
-
   resources :accounts
-
 
   resources :users
 

@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   				:rememberable, :trackable, :validatable
   has_many :accounts
   has_many :clients, :through=>:accounts
+  has_many :user_messages
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :plataform_id,:phone_number,:password,:wallet,:use_mobile_app,
@@ -23,11 +24,11 @@ class User < ActiveRecord::Base
 
   def pay_credit_loan(amount, client_id)
     account = account_for(client_id)
-     account.transaction do 
+    account.transaction do 
       begin
         if account && self.wallet >= amount
           self.update_attribute(:wallet, self.wallet - amount)
-          acccount.update_attribute(:amount,amount)
+          account.update_attribute(:amount,amount)
         else
           return false
         end
@@ -38,16 +39,36 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.compare_number(number)
+    where("CONCAT('+503', phone_number)=?", number).first rescue nil
+  end
+
+  def register_message(sms_sid, sms_message, sms_from, sms_date_sent, data_hash)
+    usm = UserMessage.new(user_id: self.id, message_id: sms_sid, message: sms_message, from: sms_from, date_sent: sms_date_sent)
+    usm.save
+
+    #HERE GOES THE SHOW
+    command = data_hash["command"]
+    amount = data_hash["amount"]
+    plataform_id = data_hash["plataform_id"]
+    account_id = data_hash["account_id"]
+
+    message = "Hola, gracias por tu pago; los datos que enviaste son: #{command},#{amount},#{plataform_id},#{account_id}"
+    sender = SmsMod::Sender.new
+    sender.send_message(self.phone_number, message)
+  end
+
   def pay_third_service(amount, client_id)
     client = self.clients.find(client_id)
     client.transaction do
       begin
         self.update_attribute(:wallet, self.wallet - amount)
-          acccount.update_attribute(:total_amount,amount)
+        client.update_attribute(:total_amount,amount)
       rescue
         raise ActiveRecord::Rollback
         return false
       end
     end
   end
+
 end

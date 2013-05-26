@@ -13,8 +13,6 @@ module SmsMod
 			  :to => "+503#{number}",
 			  :body => message
 			)
-
-			puts @obj
 		end
 
 	end

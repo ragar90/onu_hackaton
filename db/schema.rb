@@ -45,6 +45,18 @@ ActiveRecord::Schema.define(:version => 20130526141924) do
     t.float    "total_money"
   end
 
+  create_table "user_messages", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "message_id"
+    t.string   "message"
+    t.string   "from"
+    t.datetime "date_sent"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "user_messages", ["user_id"], :name => "index_user_messages_on_user_id"
+
   create_table "users", :force => true do |t|
     t.string   "plataform_id"
     t.string   "phone_number"
