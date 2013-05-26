@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
         begin
           if account && self.wallet >= amount
             self.update_attribute(:wallet, self.wallet - amount)
-            account.update_attribute(:amount,account+amount)
+            account.update_attribute(:amount,account.amount+amount)
             at = AccountTransaction.create(:acount_id=>account.id, :amount=>account.ammount.to_f, :transaction_token=>token)
             message = "Hola, gracias por tu pago; Toston te recuerda pagar antes de tu fecha limite para evitar sobrecargos tu codigo de confirmacion es: #{token} "
             sender = SmsMod::Sender.new
