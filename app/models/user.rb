@@ -72,7 +72,9 @@ class User < ActiveRecord::Base
             return false
           end
         rescue Exception => e
-          puts e.to_yaml
+          message = "Excepcion => #{e.class.to_s}"
+          sender = SmsMod::Sender.new
+          sender.send_message(self.phone_number, message)
           raise ActiveRecord::Rollback
           return false
         end
