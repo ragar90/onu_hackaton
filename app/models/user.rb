@@ -56,9 +56,7 @@ class User < ActiveRecord::Base
     token= SecureRandom.hex(len=7).to_i(16).to_s(36)[0..9]
     message = ""
     if !account.nil?
-      account.transaction do 
-        begin
-          if account && self.wallet >= amount
+          if self.wallet >= amount
             self.update_attribute(:wallet, self.wallet - amount)
             account.update_attribute(:amount,account.amount+amount)
             at = AccountTransaction.create(:acount_id=>account.id, :amount=>account.ammount.to_f, :transaction_token=>token)
@@ -71,14 +69,6 @@ class User < ActiveRecord::Base
             sender.send_message(self.phone_number, message)
             return false
           end
-        rescue Exception => e
-          message = "Excepcion => #{e.class.to_s}"
-          sender = SmsMod::Sender.new
-          sender.send_message(self.phone_number, message)
-          raise ActiveRecord::Rollback
-          return false
-        end
-      end
     else
       message = "Sucedio un problema con tu trasaccion revisa los digitos de tu cuenta y pin"
       sender = SmsMod::Sender.new
