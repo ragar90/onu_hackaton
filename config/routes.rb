@@ -1,4 +1,9 @@
 OnuHackaton::Application.routes.draw do
+  devise_for :users, :controllers => { :sessions => "sessions" }
+
+  root :to => "home#index"
+  get "inicio" => "home#index"
+
   resources :clients
 
 
