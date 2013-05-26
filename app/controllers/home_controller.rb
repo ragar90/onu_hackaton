@@ -4,4 +4,11 @@ class HomeController < ApplicationController
   		format.json { render :json=> {:message=>"Hola Bienvenido a Toston Cloud Banking"}}
   	end
   end
+
+  def get_user_message
+  	File.open('test_get_user_message', 'w') do |f|  
+  		f.puts "#{params.inspect}\n"  
+	end 
+  end
+
 end

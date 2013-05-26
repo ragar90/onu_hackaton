@@ -1,6 +1,8 @@
 OnuHackaton::Application.routes.draw do
   devise_for :users, :controllers => { :sessions => "sessions" }
 
+  get "get_user_message" => "home#get_user_message"
+
   root :to => "home#index"
   get "inicio" => "home#index"
 
